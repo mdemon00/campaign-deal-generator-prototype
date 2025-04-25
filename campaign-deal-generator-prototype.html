@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Deal Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: #f5f8fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 24px;
+            font-size: 24px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 24px 0 16px;
+            font-size: 18px;
+        }
+        
+        .form-section {
+            margin-bottom: 32px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 24px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #636e72;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #dfe6e9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #0066ff;
+            box-shadow: 0 0 0 3px rgba(0,102,255,0.1);
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #0066ff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0052cc;
+        }
+        
+        .btn-secondary {
+            background: #f1f3f5;
+            color: #495057;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .line-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        
+        .line-items-table th,
+        .line-items-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        .line-items-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .line-item-type {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        
+        .campaign-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .summary-item {
+            background: white;
+            padding: 16px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .summary-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 4px;
+        }
+        
+        .summary-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .new-line-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Campaign Deal Generator</h1>
+        
+        <form id="campaignDealForm">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h2>Basic Information</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="campaignName">Campaign Name</label>
+                        <input type="text" id="campaignName" placeholder="Enter campaign name">
+                    </div>
+                    <div class="form-group">
+                        <label for="commercialAgreement">Commercial Agreement</label>
+                        <select id="commercialAgreement">
+                            <option value="">Select Commercial Agreement</option>
+                            <option value="publicis_mx_2025">Publicis MX 2025</option>
+                            <option value="omd_ar_2025">OMD AR 2025</option>
+                            <option value="havas_co_2025">Havas CO 2025</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" placeholder="Auto-populated from agreement" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="advertiser">Advertiser</label>
+                        <select id="advertiser">
+                            <option value="">Select or Create New</option>
+                            <option value="lancome">Lancome</option>
+                            <option value="loreal">L'Oreal</option>
+                            <option value="new">+ Create New Advertiser</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealOwner">Deal Owner</label>
+                        <select id="dealOwner">
+                            <option value="">Select Deal Owner</option>
+                            <option value="julio_salvide">Julio Salvide</option>
+                            <option value="maria_garcia">Maria Garcia</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Currency</label>
+                        <input type="text" id="currency" value="MXN" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campaign Details -->
+            <div class="form-section">
+                <h2>Campaign Details</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="campaignType">Campaign Type</label>
+                        <select id="campaignType">
+                            <option value="">Select Campaign Type</option>
+                            <option value="aon">AON</option>
+                            <option value="flight">Flight</option>
+                            <option value="event">Event</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taxId">Tax ID</label>
+                        <input type="text" id="taxId" placeholder="Enter or create new Tax ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="businessName">Business Name</label>
+                        <input type="text" id="businessName" placeholder="Enter business name">
+                    </div>
+                    <div class="form-group">
+                        <label for="dealCS">Deal CS</label>
+                        <select id="dealCS">
+                            <option value="">Select CS Representative</option>
+                            <option value="mara_corpus">Mara Corpus</option>
+                            <option value="juan_perez">Juan Perez</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Items -->
+            <div class="form-section">
+                <h2>Line Items</h2>
+                
+                <!-- New Line Item Form -->
+                <div class="new-line-item">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Line Item Name</label>
+                            <input type="text" id="newItemName" placeholder="Enter line item name">
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select id="newItemCountry">
+                                <option value="MX">Mexico</option>
+                                <option value="AR">Argentina</option>
+                                <option value="CO">Colombia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="itemType" value="initial" checked> Initial
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="itemType" value="upweight"> Upweight
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="itemType" value="rebooking"> Rebooking
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" id="newItemStartDate">
+                        </div>
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" id="newItemEndDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" id="newItemPrice" placeholder="0.00" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Billable Quantity</label>
+                            <input type="number" id="newItemBillable" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Bonus Quantity</label>
+                            <input type="number" id="newItemBonus" placeholder="0">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="addLineItem()">Add Line Item</button>
+                </div>
+
+                <!-- Line Items Table -->
+                <table class="line-items-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Line Item</th>
+                            <th>Name</th>
+                            <th>Country</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Buying Model</th>
+                            <th>Price</th>
+                            <th>Units</th>
+                            <th>Billable Qty</th>
+                            <th>Bonus Qty</th>
+                            <th>Total Billable</th>
+                            <th>Total Bonus</th>
+                            <th>Total Budget</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lineItemsTableBody">
+                        <!-- Line items will be added here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Campaign Summary -->
+            <div class="campaign-summary">
+                <h2>Campaign Summary</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Total Budget</div>
+                        <div class="summary-value" id="totalBudget">$0.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Billable</div>
+                        <div class="summary-value" id="totalBillable">$0.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Bonus</div>
+                        <div class="summary-value" id="totalBonus">$0.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Line Items</div>
+                        <div class="summary-value" id="lineItemCount">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                <button type="button" class="btn btn-secondary">Save Draft</button>
+                <button type="submit" class="btn btn-primary">Create Campaign Deal</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Sample data
+        let lineItems = [];
+        let lineItemCounter = 0;
+
+        // Update commercial agreement selection
+        document.getElementById('commercialAgreement').addEventListener('change', function(e) {
+            const company = document.getElementById('company');
+            const currency = document.getElementById('currency');
+            
+            if (e.target.value === 'publicis_mx_2025') {
+                company.value = 'Publicis Mexico';
+                currency.value = 'MXN';
+            } else if (e.target.value === 'omd_ar_2025') {
+                company.value = 'OMD Argentina';
+                currency.value = 'ARS';
+            } else if (e.target.value === 'havas_co_2025') {
+                company.value = 'Havas Colombia';
+                currency.value = 'COP';
+            } else {
+                company.value = '';
+                currency.value = '';
+            }
+        });
+
+        // Add line item function
+        function addLineItem() {
+            const name = document.getElementById('newItemName').value;
+            const country = document.getElementById('newItemCountry').value;
+            const startDate = document.getElementById('newItemStartDate').value;
+            const endDate = document.getElementById('newItemEndDate').value;
+            const price = parseFloat(document.getElementById('newItemPrice').value) || 0;
+            const billable = parseInt(document.getElementById('newItemBillable').value) || 0;
+            const bonus = parseInt(document.getElementById('newItemBonus').value) || 0;
+            const type = document.querySelector('input[name="itemType"]:checked').value;
+
+            if (!name || !startDate || !endDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            lineItemCounter++;
+            const totalBillable = price * billable;
+            const totalBonus = price * bonus;
+            const totalBudget = totalBillable;
+
+            const lineItem = {
+                id: lineItemCounter,
+                name,
+                country,
+                startDate,
+                endDate,
+                price,
+                billable,
+                bonus,
+                type,
+                totalBillable,
+                totalBonus,
+                totalBudget
+            };
+
+            lineItems.push(lineItem);
+            renderLineItems();
+            updateSummary();
+            
+            // Clear form
+            document.getElementById('newItemName').value = '';
+            document.getElementById('newItemStartDate').value = '';
+            document.getElementById('newItemEndDate').value = '';
+            document.getElementById('newItemPrice').value = '';
+            document.getElementById('newItemBillable').value = '';
+            document.getElementById('newItemBonus').value = '';
+        }
+
+        // Render line items table
+        function renderLineItems() {
+            const tbody = document.getElementById('lineItemsTableBody');
+            tbody.innerHTML = '';
+
+            lineItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>DSP Display</td>
+                    <td>${item.name}</td>
+                    <td>${item.country}</td>
+                    <td>${item.startDate}</td>
+                    <td>${item.endDate}</td>
+                    <td>CPC</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>Clicks</td>
+                    <td>${item.billable}</td>
+                    <td>${item.bonus}</td>
+                    <td>$${item.totalBillable.toFixed(2)}</td>
+                    <td>$${item.totalBonus.toFixed(2)}</td>
+                    <td>$${item.totalBudget.toFixed(2)}</td>
+                    <td>${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="removeLineItem(${index})">Remove</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Remove line item
+        function removeLineItem(index) {
+            lineItems.splice(index, 1);
+            renderLineItems();
+            updateSummary();
+        }
+
+        // Update summary
+        function updateSummary() {
+            const totalBudget = lineItems.reduce((sum, item) => sum + item.totalBudget, 0);
+            const totalBillable = lineItems.reduce((sum, item) => sum + item.totalBillable, 0);
+            const totalBonus = lineItems.reduce((sum, item) => sum + item.totalBonus, 0);
+
+            document.getElementById('totalBudget').textContent = `$${totalBudget.toFixed(2)}`;
+            document.getElementById('totalBillable').textContent = `$${totalBillable.toFixed(2)}`;
+            document.getElementById('totalBonus').textContent = `$${totalBonus.toFixed(2)}`;
+            document.getElementById('lineItemCount').textContent = lineItems.length;
+        }
+
+        // Form submission
+        document.getElementById('campaignDealForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                campaignName: document.getElementById('campaignName').value,
+                commercialAgreement: document.getElementById('commercialAgreement').value,
+                company: document.getElementById('company').value,
+                advertiser: document.getElementById('advertiser').value,
+                dealOwner: document.getElementById('dealOwner').value,
+                currency: document.getElementById('currency').value,
+                campaignType: document.getElementById('campaignType').value,
+                taxId: document.getElementById('taxId').value,
+                businessName: document.getElementById('businessName').value,
+                dealCS: document.getElementById('dealCS').value,
+                lineItems: lineItems
+            };
+
+            console.log('Campaign Deal Data:', formData);
+            alert('Campaign Deal Created Successfully!\n\nCheck console for deal data.');
+        });
+    </script>
+</body>
+</html>
